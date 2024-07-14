@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: history
+  datasource:
+    url: jdbc:oracle:thin:@localhost:1521/xe
+    username: system
+    password: 12345
+    driver-class-name: oracle.jdbc.OracleDriver
+    hikari:
+      connection-timeout: 20000
+      minimum-idle: 10
+      maximum-pool-size: 10
+      idle-timeout: 300000
+      max-lifetime: 600000
+
+mybatis:
+  config-location: classpath:mybatis-config.xml
+  mapper-locations: classpath:mappers/*.xml
+
+server:
+  port: 8080
