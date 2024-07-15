@@ -29,7 +29,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web-services'
 
 	// mybatis
-    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2' 
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3' 
 
 	// jdbc 
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
