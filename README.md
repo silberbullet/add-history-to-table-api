@@ -29,6 +29,60 @@
 
 ## ▶ 설계
 
+### Business Layer와 DAO Layer 전략
+
+<details>
+<summary>mybatis-spring-boot-starter 알아보기</summary>
+
+MyBatis-Spring-Boot-Starter는 MyBatis와 Spring Boot를 쉽게 통합할 수 있도록 도와주는 스타터 패키지입니다. 이 스타터 패키지는 여러 가지 자동 설정을 제공하여 개발자가 설정해야 할 항목을 최소화합니다 </br>
+mybatis-spring-boot-starter는 현재 2024 4월 기준으로 3.0.2까지 버전을 둔다 </br>
+또한 3.0버전을 쓰기 위해서는 Spring Boot는 3.0 이상 java 17 버전 이상이여야 한다. </br>
+
+### 1. DataSource 자동 감지
+
+MyBatis-Spring-Boot-Starter는 기존에 정의된 `DataSource`를 자동으로 감지합니다. Spring Boot는 데이터베이스 연결 정보를 기반으로 `DataSource` 빈을 생성합니다. 이 `DataSource`는 MyBatis 설정에서 사용됩니다.
+
+**예시**:
+Spring Boot가 `application.yml` 파일에서 데이터 소스 설정을 감지하고 자동으로 `DataSource` 빈을 생성합니다.
+
+```properties
+spring:
+  application:
+    name: history
+  datasource:
+    url: jdbc:oracle:thin:@localhost:1521/xe
+    username: system
+    password: 12345
+    driver-class-name: oracle.jdbc.OracleDriver
+```
+
+### 2. SqlSessionFactory 인스턴스 생성 및 등록
+
+MyBatis-Spring-Boot-Starter는 `SqlSessionFactoryBean`을 사용하여 `SqlSessionFactory` 인스턴스를 생성하고, 이를 Spring 컨텍스트에 빈으로 등록합니다. `SqlSessionFactory`는 MyBatis가 SQL 세션을 생성하는 데 사용됩니다.
+
+**설명**:
+
+- `SqlSessionFactoryBean`은 `DataSource`를 입력으로 받아 `SqlSessionFactory`를 생성합니다.
+- `SqlSessionFactory`는 MyBatis의 주요 설정 객체로, SQL 세션을 생성하는 역할을 합니다.
+
+### 3. SqlSessionTemplate 인스턴스 생성 및 등록
+
+MyBatis-Spring-Boot-Starter는 `SqlSessionFactory`로부터 `SqlSessionTemplate` 인스턴스를 생성하고, 이를 Spring 컨텍스트에 빈으로 등록합니다. `SqlSessionTemplate`은 MyBatis의 주요 실행 객체로, `SqlSession`을 구현하여 SQL 쿼리를 실행하는 역할을 합니다.
+
+**설명**:
+
+- `SqlSessionTemplate`은 `SqlSession`의 구현체로, 쓰레드 안전하며 트랜잭션 관리, 예외 처리를 포함한 MyBatis 작업을 수행합니다.
+
+### 4. 매퍼 자동 스캔 및 등록
+
+MyBatis-Spring-Boot-Starter는 매퍼 인터페이스를 자동으로 스캔하고, 이를 `SqlSessionTemplate`과 연결하여 Spring 컨텍스트에 빈으로 등록합니다. 이를 통해 매퍼 인터페이스를 Spring의 의존성 주입(Dependency Injection)으로 사용할 수 있게 됩니다.
+
+**설명**:
+
+- `@MapperScan` 어노테이션을 사용하여 매퍼 인터페이스가 위치한 패키지를 지정하면, MyBatis가 해당 패키지의 모든 매퍼 인터페이스를 자동으로 스캔하고 빈으로 등록합니다.
+
+</details>
+
 1. **내역 테이블 설계**
 
 ```

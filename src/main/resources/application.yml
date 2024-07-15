@@ -13,9 +13,15 @@ spring:
       idle-timeout: 300000
       max-lifetime: 600000
 
-mybatis:
-  config-location: classpath:mybatis-config.xml
-  mapper-locations: classpath:mapper/*.xml
-
 server:
   port: 8080
+
+#Mybatis 설정
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.delivery.history.api.model
+  configuration:
+    map-underscore-to-camel-case: true
+    default-fetch-size: 100
+    default-statement-timeout: 30
+    cacheEnabled
