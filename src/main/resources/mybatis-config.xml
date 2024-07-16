@@ -11,5 +11,6 @@
     <setting name="useGeneratedKeys" value="true"/>
     <setting name="autoMappingBehavior" value="FULL"/>
     <setting name="autoMappingUnknownColumnBehavior" value="WARNING"/>
+    <setting name="logImpl" value="LOG4J2"/>
   </settings>
 </configuration>

@@ -2,10 +2,10 @@ spring:
   application:
     name: history
   datasource:
-    url: jdbc:oracle:thin:@localhost:1521/xe
+    url: jdbc:log4jdbc:oracle:thin:@localhost:1521/xe
     username: system
     password: 12345
-    driver-class-name: oracle.jdbc.OracleDriver
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
     ## 선택적 hikari
     hikari:
       connection-timeout: 20000
@@ -16,10 +16,6 @@ spring:
 
 server:
   port: 8080
-
-logging:
-  level:
-    org.springframework: DEBUG
 
 #Mybatis 설정
 mybatis:
