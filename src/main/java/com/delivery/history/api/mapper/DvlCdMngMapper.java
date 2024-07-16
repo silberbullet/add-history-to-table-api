@@ -25,5 +25,21 @@ public interface DvlCdMngMapper {
      * @param {DvlCdMngReq} dvlCdMngReq
      * @return ArrayList<DvlCdMngRes>
      */
-    public ArrayList<DvlCdMngRes> selectList(DvlCdMngReq dvlCdMngReq) throws TransactionException;
+    public ArrayList<DvlCdMngRes> selectList(DvlCdMngReq dvlCdMngReq);
+
+    /**
+     * 배송비 정책 키 제너레이션
+     *
+     * @param {DvlCdMngReq} dvlCdMngReq
+     * @return public
+     */
+    public String getDvlCdKey();
+
+    /**
+     * 배송비 정책 등록
+     *
+     * @param {DvlCdMngReq} dvlCdMngReq
+     * @return int
+     */
+    public int insertDvlCd(DvlCdMngReq dvlCdMngReq) throws TransactionException;
 }

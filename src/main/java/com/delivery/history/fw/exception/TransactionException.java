@@ -1,14 +1,13 @@
 package com.delivery.history.fw.exception;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 
-public class TransactionException extends DataAccessException {
+public class TransactionException extends RuntimeException {
 
     private String errorCd;
 
-    public TransactionException(String msg) {
-        super(msg);
+    public TransactionException(String message) {
+        super(message);
         this.errorCd = String.valueOf(HttpStatus.SERVICE_UNAVAILABLE.value());
     }
 

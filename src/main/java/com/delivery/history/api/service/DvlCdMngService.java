@@ -23,4 +23,12 @@ public interface DvlCdMngService {
      * @return ArrayList<DvlCdMngRes>
      */
     public ArrayList<DvlCdMngRes> selectList(DvlCdMngReq dvlCdMngReq) throws BusinessException;
+
+    /**
+     * 배송비 정책 등록
+     *
+     * @param {DvlCdMngReq} dvlCdMngReq
+     * @return DvlCdMngRes
+     */
+    public DvlCdMngRes insertDvlCd(DvlCdMngReq dvlCdMngReq) throws BusinessException;
 }

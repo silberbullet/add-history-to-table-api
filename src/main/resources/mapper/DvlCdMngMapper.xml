@@ -2,8 +2,61 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.delivery.history.api.mapper.DvlCdMngMapper">
-    <select id="selectList" parameterType="com.delivery.history.api.model.req.DvlCdMngReq" resultType="com.delivery.history.api.model.res.DvlCdMngRes">
-        SELECT *
-        FROM DVL_POLICY_DTL
+    <select id="selectList" parameterType="DvlCdMngReq" resultType="DvlCdMngRes">
+    SELECT /*DvlCdMngMapper.selectList */
+           DVL_CD,
+           DVL_TYPE_CD,
+           DVL_NAME,
+           START_DATE,
+           END_DATE,
+           DVL_COST,
+           USE_YN 
+      FROM DVL_POLICY_DTL
+     WHERE 1=1
+       <if test="dvlCd != null">
+            AND DVL_CD = #{dvlCd}
+       </if>
+       <if test="dvlTypeCd != null">
+            AND DVL_TYPE_CD = #{dvlTypeCd}
+       </if>
+       <if test="dvlName != null">
+            AND DVL_NAME LIKE '%'|| #{dvlName} || '%'
+       </if>
+       <if test="useYn != null">
+            AND USE_YN = #{useYn}
+       </if>
+       <if test="startDate != null">
+            AND START_DATE &lt;= TO_DATE(#{startDate} || '00:00:00', 'HH24:MI:SS')
+            AND END_DATE &gt;=  TO_DATE(#{startDate} || '00:00:00', 'HH24:MI:SS')
+       </if>
     </select>
+
+     <select id="getDvlCdKey"  resultType="String">
+          SELECT TO_CHAR(NVL(MAX(TO_NUMBER(DVL_CD)),0)+1,'0000') AS DVL_CD
+          FROM DVL_POLICY_DTL
+    </select>
+
+
+    <insert id="insertDvlCd" parameterType="DvlCdMngReq">
+        INSERT INTO DVL_POLICY_DTL
+        (
+           DVL_CD,
+           DVL_TYPE_CD,
+           DVL_NAME,
+           START_DATE,
+           END_DATE,
+           DVL_COST,
+           USE_YN 
+        )
+        VALUES
+        (
+           #{dvlCd},
+           #{dvlTypeCd},
+           (SELECT CD_NAME FROM DVL_TYPE_CM_CD WHERE CD = #{dvlTypeCd}),
+           TO_DATE(#{startDate}|| '00:00:00','YYYY-MM-DD HH24:MI:SS'),
+           TO_DATE('9999-12-31 23:59:59','YYYY-MM-DD HH24:MI:SS'),
+           #{dvlCost},
+           'Y'
+        )
+    </insert>
 </mapper>

@@ -1,6 +1,7 @@
 package com.delivery.history.fw.response;
 
 import org.springframework.core.MethodParameter;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
  * @since 2024.07
  */
 @RestControllerAdvice
+@Order(2)
 public class CMResponseAdvice implements ResponseBodyAdvice<Object> {
 
     @Override
