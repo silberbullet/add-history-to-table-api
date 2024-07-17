@@ -23,13 +23,15 @@
 1. [설계](#-설계)
 2. [구현](#-구현)
 3. [테스트](#-테스트)
-4. [Problem-Solving and Key Considerations](#-Problem-Solving-and-Key-Considerations)
+4. [리팩토링](#-리팩토링)
 
 ---
 
 ## ▶ 설계
 
 ### Business Layer와 DAO Layer 전략
+
+해당 프로젝트는 Controller -> Service -> Mapper 형식이 아닌 **Controller -> Service -> Repository -> Mapper** 로 층을 나누었다. Client 에게 Http 통신 시 응답 결과를 항상 던져야 했는데, 에러가 발생 했다면 Business 쪽인지 DAO 쪽인 에러 전달이 더 용이 하였다. 또한 Business 로직과 DAO 로직을 재사용 가능 하였다. 또한 각 계층을 분리하니 코드가 더 구조화 되고 관리하기 쉬워 개발 생산성에도 유리한 측면을 보였다. 나 또한 이 전략을 토대로 Business와 DAO에서 발생하는 unchecked 에러를 핸들링 할 수 있도록 작성하였다.
 
 <details>
 <summary>mybatis-spring-boot-starter 알아보기</summary>
@@ -184,3 +186,9 @@ erDiagram
     - 사용자는 USE_YN의 값이 "Y"인 데이터만 화면에 보여지기 때문에 (DVL_CD = "0002") 정책은 화면에 미노출, 실제로는 삭제가 되지 않는다.
 
 3. **3가지 유형 동시 이력관리 방안**
+
+## ▶ 구현
+
+## ▶ 리팩토링
+
+백엔드를 개발 하면서 기본기가 부족한 나는 모던 인 자바 책을 공부해 보면서 시도 중임

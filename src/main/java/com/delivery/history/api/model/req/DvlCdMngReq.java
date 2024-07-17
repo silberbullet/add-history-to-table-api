@@ -1,8 +1,8 @@
 package com.delivery.history.api.model.req;
 
-import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * <p>
@@ -14,6 +14,7 @@ import lombok.Data;
  * @since 2024.07
  */
 @Data
+@Accessors(chain = true)
 public class DvlCdMngReq {
 
     // 배송정책코드

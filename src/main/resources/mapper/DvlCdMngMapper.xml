@@ -3,7 +3,7 @@
 
 <mapper namespace="com.delivery.history.api.mapper.DvlCdMngMapper">
     <select id="selectList" parameterType="DvlCdMngReq" resultType="DvlCdMngRes">
-    SELECT /*DvlCdMngMapper.selectList */
+    SELECT /* DvlCdMngMapper.selectList */
            DVL_CD,
            DVL_TYPE_CD,
            DVL_NAME,
@@ -26,19 +26,24 @@
             AND USE_YN = #{useYn}
        </if>
        <if test="startDate != null">
-            AND START_DATE &lt;= TO_DATE(#{startDate} || '00:00:00', 'HH24:MI:SS')
-            AND END_DATE &gt;=  TO_DATE(#{startDate} || '00:00:00', 'HH24:MI:SS')
+            AND END_DATE &gt;=  TO_DATE(#{startDate} || '00:00:00', 'YYYY-MM-DD HH24:MI:SS')
        </if>
+        <if test="endDate != null">
+             AND START_DATE &lt;= TO_DATE(#{endDate} || '23:59:59', 'YYYY-MM-DD HH24:MI:SS')
+        </if>
+       ORDER BY DVL_TYPE_CD, START_DATE
     </select>
 
      <select id="getDvlCdKey"  resultType="String">
-          SELECT TO_CHAR(NVL(MAX(TO_NUMBER(DVL_CD)),0)+1,'0000') AS DVL_CD
+          SELECT /* DvlCdMngMapper.getDvlCdKey */
+                TO_CHAR(NVL(MAX(TO_NUMBER(DVL_CD)),0)+1,'0000') AS DVL_CD
           FROM DVL_POLICY_DTL
     </select>
 
 
     <insert id="insertDvlCd" parameterType="DvlCdMngReq">
-        INSERT INTO DVL_POLICY_DTL
+        INSERT /* DvlCdMngMapper.insertDvlCd */ 
+        INTO DVL_POLICY_DTL
         (
            DVL_CD,
            DVL_TYPE_CD,
@@ -54,9 +59,23 @@
            #{dvlTypeCd},
            (SELECT CD_NAME FROM DVL_TYPE_CM_CD WHERE CD = #{dvlTypeCd}),
            TO_DATE(#{startDate}|| '00:00:00','YYYY-MM-DD HH24:MI:SS'),
-           TO_DATE('9999-12-31 23:59:59','YYYY-MM-DD HH24:MI:SS'),
+           TO_DATE(#{endDate},'YYYY-MM-DD HH24:MI:SS'),
            #{dvlCost},
            'Y'
         )
     </insert>
+
+     <update id="updateDvlCd" parameterType="DvlCdMngReq">
+        UPDATE /* DvlCdMngMapper.updateDvlCd */ 
+        DVL_POLICY_DTL
+        <set>
+            <if test="endDate != null">
+                END_DATE = TO_DATE(#{endDate},'YYYY-MM-DD HH24:MI:SS'),
+            </if>
+            <if test="useYn != null">
+                USE_YN = #{useYn},
+            </if>
+        </set>
+        WHERE DVL_CD = #{dvlCd}
+    </update>
 </mapper>

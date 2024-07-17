@@ -52,8 +52,8 @@ public class DvlCdMngController {
      * @return String
      */
     @PostMapping("/insert-dvl-cd")
-    public String insertDvlCd(@Valid @RequestBody DvlCdMngReq dvlCdMngReq) {
+    public DvlCdMngRes insertDvlCd(@Valid @RequestBody DvlCdMngReq dvlCdMngReq) {
 
-        return dvlCdMngService.insertDvlCd(dvlCdMngReq).toString();
+        return dvlCdMngService.insertDvlCd(dvlCdMngReq);
     }
 }

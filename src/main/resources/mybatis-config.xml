@@ -12,5 +12,7 @@
     <setting name="autoMappingBehavior" value="FULL"/>
     <setting name="autoMappingUnknownColumnBehavior" value="WARNING"/>
     <setting name="logImpl" value="LOG4J2"/>
+    <!-- 언더스코어 표기법을 카멜케이스 표기법으로 자동 변환 -->
+    <setting name="mapUnderscoreToCamelCase" value="true"/>
   </settings>
 </configuration>

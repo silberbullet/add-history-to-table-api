@@ -2,11 +2,9 @@ package com.delivery.history.api.repository;
 
 import java.util.ArrayList;
 
-import org.springframework.dao.DataAccessException;
-
 import com.delivery.history.api.model.req.DvlCdMngReq;
 import com.delivery.history.api.model.res.DvlCdMngRes;
-import com.delivery.history.fw.exception.BusinessException;
+
 import com.delivery.history.fw.exception.TransactionException;
 
 /**
@@ -34,4 +32,12 @@ public interface DvlCdMngRepository {
      * @return DvlCdMngRes
      */
     public DvlCdMngRes insertDvlCd(DvlCdMngReq dvlCdMngReq) throws TransactionException;
+
+    /**
+     * 배송비 정책 수정
+     *
+     * @param {DvlCdMngReq} dvlCdMngReq
+     * @return DvlCdMngRes
+     */
+    public void updateDvlCd(DvlCdMngReq dvlCdMngReq) throws TransactionException;
 }

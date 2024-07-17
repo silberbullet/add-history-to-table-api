@@ -1,6 +1,7 @@
 package com.delivery.history.api.model.res;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * <p>
@@ -12,6 +13,7 @@ import lombok.Data;
  * @since 2024.07
  */
 @Data
+@Accessors(chain = true)
 public class DvlCdMngRes {
     // 배송정책코드
     private String dvlCd;

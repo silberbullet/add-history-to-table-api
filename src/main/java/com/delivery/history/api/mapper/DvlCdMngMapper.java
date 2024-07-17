@@ -6,7 +6,6 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.delivery.history.api.model.req.DvlCdMngReq;
 import com.delivery.history.api.model.res.DvlCdMngRes;
-import com.delivery.history.fw.exception.TransactionException;
 
 /**
  * <p>
@@ -41,5 +40,13 @@ public interface DvlCdMngMapper {
      * @param {DvlCdMngReq} dvlCdMngReq
      * @return int
      */
-    public int insertDvlCd(DvlCdMngReq dvlCdMngReq) throws TransactionException;
+    public int insertDvlCd(DvlCdMngReq dvlCdMngReq);
+
+    /**
+     * 배송비 정책 수정
+     *
+     * @param {DvlCdMngReq} dvlCdMngReq
+     * @return int
+     */
+    public int updateDvlCd(DvlCdMngReq dvlCdMngReq);
 }

@@ -2,8 +2,8 @@ package com.delivery.history.api.repository;
 
 import java.util.ArrayList;
 
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.beans.BeanUtils;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import com.delivery.history.api.mapper.DvlCdMngMapper;
@@ -11,7 +11,6 @@ import com.delivery.history.api.model.req.DvlCdMngReq;
 import com.delivery.history.api.model.res.DvlCdMngRes;
 import com.delivery.history.fw.exception.TransactionException;
 
-import ch.qos.logback.core.joran.util.beans.BeanUtil;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -41,15 +40,29 @@ public class DvlCdMngRepositoryImpl implements DvlCdMngRepository {
      * 배송비 정책 등록
      */
     @Override
-    public DvlCdMngRes insertDvlCd(DvlCdMngReq dvlCdMngReq) {
+    public DvlCdMngRes insertDvlCd(DvlCdMngReq dvlCdMngReq) throws TransactionException {
 
-        // selectKey 동시성을 방지 하기 위한 DVL_CD 제너레이션
-        String newDvlCd = dvlCdMngMapper.getDvlCdKey();
+        try {
+            // selectKey 동시성을 방지 하기 위한 DVL_CD 제너레이션
+            String newDvlCd = dvlCdMngMapper.getDvlCdKey();
+            // Primary Key 세팅
+            dvlCdMngReq.setDvlCd(newDvlCd);
 
-        dvlCdMngReq.setDvlCd(newDvlCd);
+            dvlCdMngMapper.insertDvlCd(dvlCdMngReq);
 
-        dvlCdMngMapper.insertDvlCd(dvlCdMngReq);
+            DvlCdMngRes result = new DvlCdMngRes();
 
-        return null;
+            BeanUtils.copyProperties(dvlCdMngReq, result);
+
+            return result;
+        } catch (PersistenceException e) {
+            throw new TransactionException("Failed to insert DvlCd: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void updateDvlCd(DvlCdMngReq dvlCdMngReq) throws TransactionException {
+
+        dvlCdMngMapper.updateDvlCd(dvlCdMngReq);
     }
 }
