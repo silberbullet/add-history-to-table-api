@@ -2,15 +2,16 @@
 
 #### 배경
 
-> 프로젝트가 끝나고 나서 가장 기억에 남는 문제 해결 경험이 있다.
-> 현대 홈쇼핑 차세대 프로젝트 중 **수기로 관리하는 배송비 정책을 자동화 할 수 있는 기준정보 관리 서비스 구축**을 요구사항으로 받았었다.
-> 이 데이터는 주문 파트에서 주문한 상품의 배송비를 적용해야 했기에 현재 날짜 기준으로 조회 시, 정확한 1개의 Row를 반환이 중요했다.
-> 그런데 **하나의 배송비 정책 내역 테이블이 이력 관리도 됐으면 좋겠다.**가 전제였다. 보통 정책은 잘 바뀌지 않는 데이터 이기에 별도로 이력 테이블을 만들지 않겠다고 결정이 났다. 추가적인 조건은 이러했다.
+> 프로젝트가 끝나고 나서 가장 기억에 남는 문제 해결 경험 있습니다.</br>
+> 현대 홈쇼핑 차세대 **프로젝트에서 수기로 관리하던 배송비 정책을 자동화하는 기준정보 관리 서비스를 구축**해야 했습니다..</br>
+> 이 서비스는 주문 파트에서 주문한 상품의 배송비를 정확히 적용하기 위해, 현재 날짜 기준으로 정확한 한 개의 배송비 정책 내역을 반환해야 합니다.</br>
+> 그런데 배송비 정책 내역 테이블을 이력 관리할 필요가 있었지만, **데이터 변경 빈도가 낮아 별도의 이력 테이블을 만들지 않기로 했습니다.**
 >
+> **요구사항 및 조건**
 > > 1.  배송비 정책 유형 코드(N가지)가 공통코드로 주어지고 적용 날짜와 종료 날짜가 있어야 한다.
-> > 2.  배송비 정책 유형 별로 적용날짜가 오름차순 순으로 화면에 노출되어야 한다.
+> > 2.  배송비 정책 유형별로 적용 날짜가 오름차순으로 화면에 노출되어야 한다.
 > > 3.  신규 배송 정책 등록 시, 항상 오늘 날짜 이후에 정책만 등록이 가능하다.
-> > 4.  배송 정책을 등록 후, 사용자는 각 정책들이 시작과 종료가 이력순으로 확인이 가능해야 한다.
+> > 4.  배송 정책을 등록 후, 사용자는 각 정책의 시작과 종료를 이력 순으로 확인할 수 있어야 한다.
 
 #### 목표
 
@@ -29,7 +30,7 @@
 
 ## ▶ 설계
 
-### Business Layer와 DAO Layer 전략
+0. **Business Layer와 DAO Layer 전략**
 
 해당 프로젝트는 Controller -> Service -> Mapper 형식이 아닌 **Controller -> Service -> Repository -> Mapper** 로 층을 나누었다. Client 에게 Http 통신 시 응답 결과를 항상 던져야 했는데, 에러가 발생 했다면 Business 쪽인지 DAO 쪽인 에러 전달이 더 용이 하였다. 또한 Business 로직과 DAO 로직을 재사용 가능 하였다. 또한 각 계층을 분리하니 코드가 더 구조화 되고 관리하기 쉬워 개발 생산성에도 유리한 측면을 보였다. 나 또한 이 전략을 토대로 Business와 DAO에서 발생하는 unchecked 에러를 핸들링 할 수 있도록 작성하였다.
 
@@ -135,26 +136,35 @@ erDiagram
    - 등록 시에는 입력 한 적용 날짜 유효성을 검증한다. ( 오늘 날짜 보다 이후 인지 확인 )
    - **정책 유형 코드와 적용 날짜 기준으로 검증 처리를 한다.**
      - 1. 최초 등록은 종료 날짜를 "9999-12-31 23:59:59"로 등록 한다.
-     - 2. 신규 정책 유형 코드를 기준으로 종료된 정책을 제외한 **현재 혹은 미래 적용된 정책을 조회해온다.**
-     - 3. 조회 한 목록 중 신규 정책 적용 날짜 보다 **최초로 날짜가 미래인 정책을 탐색한다.**
-     - 4. 최초로 날짜가 미래인 정책이 존재 시, 신규 정책에 종료 날짜는 미래 정책의 적용날짜 -1초 값으로 세팅을 한다.
-     - 5. 바로 전 인덱스가 존재 한다면 전 인덱스의 종료 날짜는 신규 적용날짜 -1초 값으로 Update 처리 한다.
-     - 6. 만약 동일한 적용 날짜 존재한다면 그 행은 사용여부 N으로 업데이트 처리한다.
+     - 2. 만약 동일한 적용 날짜 존재한다면 그 행은 사용여부 N으로 업데이트 처리한다.
+     - 3. 신규 정책 유형 코드를 기준으로 종료된 정책을 제외한 **현재 혹은 미래 적용된 정책을 조회해온다.**
+     - 4. 조회 한 목록 중 신규 정책 적용 날짜 보다 **최초로 날짜가 미래인 정책을 탐색한다.**
+     - 5. 최초로 날짜가 미래인 정책이 존재 시, 신규 정책에 종료 날짜는 미래 정책의 적용날짜 -1초 값으로 세팅을 한다.
+     - 6. 바로 전 인덱스가 존재 한다면 전 인덱스의 종료 날짜는 신규 적용날짜 -1초 값으로 Update 처리 한다.
      - 7. 탐색 시, 미래인 날짜가 미 존재 한다면 신규 정책이 가장 미래라 판정하여 종료 날짜를 "9999-12-31 23:59:59"로 등록 한다. 또한 전 인덱스의 종료 날짜는 신규 적용날짜 -1초 값으로 Update 처리 한다.
 
 ## ▶ 테스트
 
+1.**이전 보다 미래 날짜로 신규 등록, 최근 등록된 두 개의 행의 적용 날짜 사이로 등록 시**
+
+![test_1](https://github.com/user-attachments/assets/7269763b-7d84-4d00-9da1-207ee6d69823)
+
+2.**적용 날짜가 동일하게 등록 시(정책에 부합 X)**
+
+![test_2](https://github.com/user-attachments/assets/e546ce33-65d7-4aa3-a2eb-8e9e90b9d277)
+
+
 ## ▶ 리팩토링
 
-> 현재 모던 자바 인 액션을 공부하고 있기에 더 직관적인 코드로 리팩토링
-> 정책 이라는 데이터는 수천개 이상 쌓일 데이터와 거리가 멀기 때문에 병렬 스트림은 지향
+> 현재 모던 자바 인 액션을 공부하고 있기에 더 직관적인 코드로 리팩토링 </br>
+> 정책 이라는 데이터는 수천개 이상 쌓일 데이터와 거리가 멀기 때문에 병렬 스트림은 지향 </br>
+> 작은 데이터셋에서는 for문과 stream은 성능에 대해 미세한 차이 밖에 없지만 미래 지향적으로는 stream을 선택
+
+https://github.com/silberbullet/add-history-to-table-api/blob/5b9afa48334fb9f2111f30679add1da1e4c8b746/src/main/java/com/delivery/history/api/service/DvlCdMngServiceImpl.java#L104
 
 **리팩토링 전**
 
 ```java
-// 배송비 정책 목록 검증 처리
-private void validateDvlTypeCd(ArrayList<DvlCdMngRes> dvlTypeCdList, DvlCdMngReq dvlCdMngReq) {
-
         try {
             // 신규 정책 적용 날짜
             LocalDateTime newDvlCdStartTime = DateUtil.getDateTime(dvlCdMngReq.getStartDate());
@@ -192,14 +202,14 @@ private void validateDvlTypeCd(ArrayList<DvlCdMngRes> dvlTypeCdList, DvlCdMngReq
         } catch (DateTimeParseException e) {
             throw new BusinessException("Invalid date format" + e.getMessage());
         }
-    }
 ```
+- **성능측정** <br/>
+ ![test_5](https://github.com/user-attachments/assets/782bc812-c2a7-43f1-ae44-d6374fc5dd80)
+
 
 **리팩토링 후**
 
 ```java
-    private void validateDvlTypeCd(ArrayList<DvlCdMngRes> dvlCdList, DvlCdMngReq dvlCdMngReq) {
-
         try {
             // 신규 정책 적용 날짜
             LocalDateTime newDvlCdStartTime = DateUtil.getDateTime(dvlCdMngReq.getStartDate());
@@ -236,9 +246,12 @@ private void validateDvlTypeCd(ArrayList<DvlCdMngRes> dvlTypeCdList, DvlCdMngReq
         } catch (DateTimeParseException e) {
             throw new BusinessException("Invalid date format" + e.getMessage());
         }
-    }
 
 ```
+- **성능측정** <br/>
+  ![test_7](https://github.com/user-attachments/assets/39bd620d-22f8-4f4c-8e4e-bcab9af37ef9)
+
+
 
 ## 번외
 
