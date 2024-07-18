@@ -108,7 +108,7 @@ public class DvlCdMngServiceImpl implements DvlCdMngService {
             LocalDateTime newDvlCdStartTime = DateUtil.getDateTime(dvlCdMngReq.getStartDate());
 
             // 동일한 적용 날짜가 존재한다면 사용여부 N 처리
-            if (newDvlCdStartTime.isEqual(DateUtil.getDateTime(dvlCdList.get(0).getStartDate()))) {
+            if (newDvlCdStartTime.isEqual(DateUtil.parseDateTime(dvlCdList.get(0).getStartDate()))) {
                 updateInvalidPolicies(dvlCdList.get(0));
                 dvlCdList.remove(0);
             }

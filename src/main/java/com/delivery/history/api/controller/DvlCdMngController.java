@@ -54,6 +54,16 @@ public class DvlCdMngController {
     @PostMapping("/insert-dvl-cd")
     public DvlCdMngRes insertDvlCd(@Valid @RequestBody DvlCdMngReq dvlCdMngReq) {
 
-        return dvlCdMngService.insertDvlCd(dvlCdMngReq);
+        long startTime = System.currentTimeMillis();
+
+        DvlCdMngRes dvlCdMngRes = dvlCdMngService.insertDvlCd(dvlCdMngReq);
+
+        long endTime = System.currentTimeMillis();
+
+        long wating = endTime - startTime;
+        System.out.println("---------------------------------------------");
+        System.out.println("정책 등록 시간 milli seconds :" + wating);
+
+        return dvlCdMngRes;
     }
 }

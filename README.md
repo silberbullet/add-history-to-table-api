@@ -146,10 +146,10 @@ erDiagram
 
 ## ▶ 리팩토링
 
-> 현재 모던 자바 인 액션을 공부하고 있습니다.
-> 더 직관적이고 대용량 데이터에 대응하는 코드로 구현 중
+> 현재 모던 자바 인 액션을 공부하고 있기에 더 직관적인 코드로 리팩토링
+> 정책 이라는 데이터는 수천개 이상 쌓일 데이터와 거리가 멀기 때문에 병렬 스트림은 지향
 
-**\*리팩토링 전**
+**리팩토링 전**
 
 ```java
 // 배송비 정책 목록 검증 처리
@@ -205,7 +205,7 @@ private void validateDvlTypeCd(ArrayList<DvlCdMngRes> dvlTypeCdList, DvlCdMngReq
             LocalDateTime newDvlCdStartTime = DateUtil.getDateTime(dvlCdMngReq.getStartDate());
 
             // 동일한 적용 날짜가 존재한다면 사용여부 N 처리
-            if (newDvlCdStartTime.isEqual(DateUtil.getDateTime(dvlCdList.get(0).getStartDate()))) {
+            if (newDvlCdStartTime.isEqual(DateUtil.parseDateTime(dvlCdList.get(0).getStartDate()))) {
                 updateInvalidPolicies(dvlCdList.get(0));
                 dvlCdList.remove(0);
             }
@@ -239,6 +239,8 @@ private void validateDvlTypeCd(ArrayList<DvlCdMngRes> dvlTypeCdList, DvlCdMngReq
     }
 
 ```
+
+## 번외
 
 <details>
 <summary>mybatis-spring-boot-starter 알아보기</summary>
