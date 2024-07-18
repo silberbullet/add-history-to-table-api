@@ -27,6 +27,17 @@ public class DateUtil {
     }
 
     /**
+     * String -> LocalDate 형변환
+     *
+     * @param {String} date
+     * @return LocalDate
+     */
+    public static LocalDate parseDate(String date) {
+
+        return LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
+    /**
      * String -> LocalDateTime 형변환
      *
      * @param {String} date
