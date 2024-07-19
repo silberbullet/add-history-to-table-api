@@ -42,22 +42,19 @@ public class DvlCdMngRepositoryImpl implements DvlCdMngRepository {
     @Override
     public DvlCdMngRes insertDvlCd(DvlCdMngReq dvlCdMngReq) throws TransactionException {
 
-        try {
-            // selectKey 동시성을 방지 하기 위한 DVL_CD 제너레이션
-            String newDvlCd = dvlCdMngMapper.getDvlCdKey();
-            // Primary Key 세팅
-            dvlCdMngReq.setDvlCd(newDvlCd);
+        // selectKey 동시성을 방지 하기 위한 DVL_CD 제너레이션
+        String newDvlCd = dvlCdMngMapper.getDvlCdKey();
+        // Primary Key 세팅
+        dvlCdMngReq.setDvlCd(newDvlCd);
 
-            dvlCdMngMapper.insertDvlCd(dvlCdMngReq);
+        dvlCdMngMapper.insertDvlCd(dvlCdMngReq);
 
-            DvlCdMngRes result = new DvlCdMngRes();
+        DvlCdMngRes result = new DvlCdMngRes();
 
-            BeanUtils.copyProperties(dvlCdMngReq, result);
+        BeanUtils.copyProperties(dvlCdMngReq, result);
 
-            return result;
-        } catch (PersistenceException e) {
-            throw new TransactionException("Failed to insert DvlCd: " + e.getMessage());
-        }
+        return result;
+
     }
 
     @Override

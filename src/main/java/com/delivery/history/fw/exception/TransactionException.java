@@ -1,8 +1,9 @@
 package com.delivery.history.fw.exception;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 
-public class TransactionException extends RuntimeException {
+public class TransactionException extends DataAccessException {
 
     private String errorCd;
 

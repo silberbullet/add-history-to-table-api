@@ -63,7 +63,8 @@ public class DvlCdMngServiceImpl implements DvlCdMngService {
 
         // 정책 유형 코드과 날짜 기준으로 판단
         DvlCdMngReq selectDvlTypeCd = new DvlCdMngReq().setDvlTypeCd(dvlCdMngReq.getDvlTypeCd())
-                .setStartDate(dvlCdMngReq.getStartDate());
+                .setStartDate(dvlCdMngReq.getStartDate())
+                .setUseYn("Y");
 
         ArrayList<DvlCdMngRes> dvlCdList = dvlCdMngRepository.selectList(selectDvlTypeCd);
 
@@ -133,7 +134,10 @@ public class DvlCdMngServiceImpl implements DvlCdMngService {
                             () -> {
                                 dvlCdMngReq.setEndDate(DvlConstants.DEFAULT_END_DATE);
                                 // 마지막 인덱스는 -1초 처리
-                                updateOldDvlCd(dvlCdList.get(dvlCdList.size() - 1), newDvlCdStartTime.minusSeconds(1));
+                                if (dvlCdList.size() - 1 >= 0) {
+                                    updateOldDvlCd(dvlCdList.get(dvlCdList.size() - 1),
+                                            newDvlCdStartTime.minusSeconds(1));
+                                }
                             });
 
         } catch (DateTimeParseException e) {

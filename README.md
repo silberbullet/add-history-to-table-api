@@ -8,6 +8,7 @@
 > 그런데 배송비 정책 내역 테이블을 이력 관리할 필요가 있었지만, **데이터 변경 빈도가 낮아 별도의 이력 테이블을 만들지 않기로 했습니다.**
 >
 > **요구사항 및 조건**
+>
 > > 1.  배송비 정책 유형 코드(N가지)가 공통코드로 주어지고 적용 날짜와 종료 날짜가 있어야 한다.
 > > 2.  배송비 정책 유형별로 적용 날짜가 오름차순으로 화면에 노출되어야 한다.
 > > 3.  신규 배송 정책 등록 시, 항상 오늘 날짜 이후에 정책만 등록이 가능하다.
@@ -32,7 +33,11 @@
 
 0. **Business Layer와 DAO Layer 전략**
 
-해당 프로젝트는 Controller -> Service -> Mapper 형식이 아닌 **Controller -> Service -> Repository -> Mapper** 로 층을 나누었다. Client 에게 Http 통신 시 응답 결과를 항상 던져야 했는데, 에러가 발생 했다면 Business 쪽인지 DAO 쪽인 에러 전달이 더 용이 하였다. 또한 Business 로직과 DAO 로직을 재사용 가능 하였다. 또한 각 계층을 분리하니 코드가 더 구조화 되고 관리하기 쉬워 개발 생산성에도 유리한 측면을 보였다. 나 또한 이 전략을 토대로 Business와 DAO에서 발생하는 unchecked 에러를 핸들링 할 수 있도록 작성하였다.
+해당 프로젝트는 Controller -> Service -> Mapper 형식이 아닌 **Controller -> Service -> Repository -> Mapper** 로 층을 나누었다. Client 에게 Http 통신 시 응답 결과를 항상 던져야 했는데, 에러가 발생 했다면 Business 쪽인지 DAO 쪽인 에러 전달이 더 용이 하였다. 또한 Business 로직과 DAO 로직을 재사용 가능 하였다. 또한 각 계층을 분리하니 코드가 더 구조화 되고 관리하기 쉬워 개발 생산성에도 유리한 측면을 보였다. 이 전략을 토대로 Business와 DAO에서 발생하는 unchecked 에러를 핸들링 하도록 AOP를 작업하였다.
+
+- Business 에러 날 시 Client Response
+
+- Transaction 에러 날 시 Client Response
 
 1. **내역 테이블 설계**
 
@@ -153,7 +158,6 @@ erDiagram
 
 ![test_2](https://github.com/user-attachments/assets/e546ce33-65d7-4aa3-a2eb-8e9e90b9d277)
 
-
 ## ▶ 리팩토링
 
 > 현재 모던 자바 인 액션을 공부하고 있기에 더 직관적인 코드로 리팩토링 </br>
@@ -203,9 +207,9 @@ https://github.com/silberbullet/add-history-to-table-api/blob/5b9afa48334fb9f211
             throw new BusinessException("Invalid date format" + e.getMessage());
         }
 ```
-- **성능측정** <br/>
- ![test_5](https://github.com/user-attachments/assets/782bc812-c2a7-43f1-ae44-d6374fc5dd80)
 
+- **성능측정** <br/>
+  ![test_5](https://github.com/user-attachments/assets/782bc812-c2a7-43f1-ae44-d6374fc5dd80)
 
 **리팩토링 후**
 
@@ -248,10 +252,9 @@ https://github.com/silberbullet/add-history-to-table-api/blob/5b9afa48334fb9f211
         }
 
 ```
+
 - **성능측정** <br/>
   ![test_7](https://github.com/user-attachments/assets/39bd620d-22f8-4f4c-8e4e-bcab9af37ef9)
-
-
 
 ## 번외
 
