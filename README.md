@@ -36,8 +36,13 @@
 해당 프로젝트는 Controller -> Service -> Mapper 형식이 아닌 **Controller -> Service -> Repository -> Mapper** 로 층을 나누었다. Client 에게 Http 통신 시 응답 결과를 항상 던져야 했는데, 에러가 발생 했다면 Business 쪽인지 DAO 쪽인 에러 전달이 더 용이 하였다. 또한 Business 로직과 DAO 로직을 재사용 가능 하였다. 또한 각 계층을 분리하니 코드가 더 구조화 되고 관리하기 쉬워 개발 생산성에도 유리한 측면을 보였다. 이 전략을 토대로 Business와 DAO에서 발생하는 unchecked 에러를 핸들링 하도록 AOP를 작업하였다.
 
 - Business 에러 날 시 Client Response
+  
+![aop_1](https://github.com/user-attachments/assets/ff5244b8-c9fc-4937-bf6a-1987fa8d0fd7)
 
 - Transaction 에러 날 시 Client Response
+
+![aop_2](https://github.com/user-attachments/assets/f77f8b7c-1a60-4fe4-b8f9-ec3c86d1255f)
+
 
 1. **내역 테이블 설계**
 
